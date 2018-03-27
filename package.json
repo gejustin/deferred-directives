@@ -1,0 +1,26 @@
+{
+  "name": "deferred-directives",
+  "version": "1.0.0",
+  "description": "Directives for deferred rendering in Angular",
+  "main": "src/deferred-directives.module.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/gejustin/deferred-directives.git"
+  },
+  "author": "Gary Justin",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/gejustin/deferred-directives/issues"
+  },
+  "homepage": "https://github.com/gejustin/deferred-directives#readme",
+  "dependencies": {
+    "@angular/common": "^5.2.9",
+    "@angular/core": "^5.2.9",
+    "@angular/platform-browser": "^5.2.9",
+    "rxjs": "^5.5.8",
+    "zone.js": "^0.8.20"
+  }
+}
