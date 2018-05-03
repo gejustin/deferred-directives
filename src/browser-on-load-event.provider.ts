@@ -1,21 +1,20 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { InjectionToken, PLATFORM_ID, Provider } from '@angular/core';
 
-import { WindowRef } from './window.provider';
+export const BrowserOnloadEvent = new InjectionToken<Promise<void>>('BrowserOnloadEvent');
 
-export const BrowserOnloadEvent = new InjectionToken('BrowserOnloadEvent');
-
-export function BrowserOnloadEventFactory(platformId: any, window: Window) {
+export function BrowserOnloadEventFactory(platformId: any, document: Document) {
     if (isPlatformBrowser(platformId)) {
         return new Promise((resolve) => {
+            let loaded = document.readyState === 'complete';
 
             function onLoad() {
-                window.removeEventListener('load', onLoad);
+                document.removeEventListener('load', onLoad);
                 resolve();
             }
 
-            if (window.document.readyState !== 'complete') {
-                window.addEventListener('load', onLoad);
+            if (!loaded) {
+                document.addEventListener('load', onLoad);
             } else {
                 resolve();
             }
@@ -29,6 +28,6 @@ export const BrowserOnloadEventProvider: Provider = {
     useFactory: BrowserOnloadEventFactory,
     deps: [
         PLATFORM_ID,
-        WindowRef,
+        DOCUMENT,
     ],
 };

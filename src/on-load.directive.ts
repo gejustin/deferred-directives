@@ -1,4 +1,5 @@
 import { Directive, Inject, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+
 import { BrowserOnloadEvent } from './browser-on-load-event.provider';
 
 @Directive({

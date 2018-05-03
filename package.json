@@ -4,7 +4,7 @@
   "description": "Directives for deferred rendering in Angular",
   "main": "src/deferred-directives.module.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,21 @@
   "homepage": "https://github.com/gejustin/deferred-directives#readme",
   "dependencies": {
     "@angular/common": "^5.2.9",
+    "@angular/compiler": "^5.2.10",
     "@angular/core": "^5.2.9",
     "@angular/platform-browser": "^5.2.9",
+    "@angular/platform-browser-dynamic": "^5.2.10",
     "rxjs": "^5.5.8",
     "zone.js": "^0.8.20"
+  },
+  "devDependencies": {
+    "jasmine-core": "^3.1.0",
+    "karma": "^2.0.2",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-spec-reporter": "0.0.32",
+    "karma-typescript": "^3.0.12",
+    "puppeteer": "^1.3.0",
+    "typescript": "^2.8.3"
   }
 }

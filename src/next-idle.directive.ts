@@ -1,20 +1,34 @@
-import { Directive, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Inject, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { IdleCallbackService } from '@legacy/components/utils/idleCallback/idleCallback.service';
 
-import { CallbackScheduler } from './callback-scheduler.service';
+import { AsyncQueue } from './async-queue';
+import { NextIdleQueue } from './next-idle-queue.provider';
 
 @Directive({
     selector: '[nextIdle]',
 })
-export class NextIdleCallbackDirective implements OnInit {
+export class NextIdleCallbackDirective implements OnInit, OnDestroy {
+
+    private idleId: number;
+
     constructor(
         private templateRef: TemplateRef<any>,
         private viewContainerRef: ViewContainerRef,
-        private scheduler: CallbackScheduler,
+        private idleCallbackSvc: IdleCallbackService,
+        @Inject(NextIdleQueue) private queue: AsyncQueue,
     ) { }
 
     public ngOnInit() {
-        this.scheduler.onNextIdle(() => {
-            this.viewContainerRef.createEmbeddedView(this.templateRef);
-        });
+        this.queue.push(new Promise(resolve => {
+            this.idleId = this.idleCallbackSvc.request(() => {
+                this.viewContainerRef.createEmbeddedView(this.templateRef);
+            });
+        }));
+    }
+
+    public ngOnDestroy() {
+        if (this.idleId) {
+            this.idleCallbackSvc.cancel(this.idleId);
+        }
     }
 }

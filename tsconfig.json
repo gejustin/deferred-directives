@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "es2015",
+        "module": "commonjs",
         "moduleResolution": "node",
         "sourceMap": true,
         "emitDecoratorMetadata": true,
@@ -16,7 +16,7 @@
             "dom",
             "es5",
             "scripthost",
-            "es6",
+            "es6"
         ]
     },
     "include": [

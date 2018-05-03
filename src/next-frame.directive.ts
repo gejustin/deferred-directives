@@ -1,20 +1,39 @@
-import { Directive, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Inject, OnDestroy, OnInit, TemplateRef, ViewContainerRef, Injectable } from '@angular/core';
 
-import { CallbackScheduler } from './callback-scheduler.service';
+import { AsyncQueue } from './async-queue';
+import { NextFrameQueue } from './next-frame-queue.provider';
+import { WindowRef } from '@app/core/platform-browser/window.service';
 
 @Directive({
     selector: '[nextFrame]',
 })
-export class NextAnimationFrameDirective implements OnInit {
+@Injectable()
+export class NextAnimationFrameDirective implements OnInit, OnDestroy {
+
+    public window: Window;
+    private frameId: number;
+
     constructor(
         private templateRef: TemplateRef<any>,
         private viewContainerRef: ViewContainerRef,
-        private scheduler: CallbackScheduler,
-    ) { }
+        private windowRef: WindowRef,
+        @Inject(NextFrameQueue) private queue: AsyncQueue,
+    ) {
+        this.window = windowRef.nativeWindow;
+     }
 
     public ngOnInit() {
-        this.scheduler.onNextFrame(() => {
-            this.viewContainerRef.createEmbeddedView(this.templateRef);
-        });
+        this.queue.push(new Promise(resolve => {
+            this.frameId = this.window.requestAnimationFrame(() => {
+                this.viewContainerRef.createEmbeddedView(this.templateRef);
+                resolve();
+            });
+        }));
+    }
+
+    public ngOnDestroy() {
+        if (this.frameId) {
+            this.window.cancelAnimationFrame(this.frameId);
+        }
     }
 }
